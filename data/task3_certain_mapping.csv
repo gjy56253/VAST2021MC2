@@ -1,0 +1,21 @@
+﻿last4ccnum,loyaltynum,Matched_CarID,FullName,CurrentEmploymentType,CurrentEmploymentTitle,Inference_Probability_Str,Car_Share_Prob,Loyalty_Share_Prob,Match_Count,Certainty_Level,Uncertainty_Reason
+9635,L3191,3.0,Felix Balas,Engineering,Engineer,100.00%,1.0,1.0,24,High (铁证),无异常，完美1对1
+7688,L4164,4.0,Ingrid Barranco,Executive,SVP/CFO,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+2540,L5947,7.0,Elsa Orilla,Engineering,Drill Technician,100.00%,1.0,1.0,20,High (铁证),无异常，完美1对1
+1877,L3014,9.0,Gustav Cazar,Engineering,Drill Technician,100.00%,1.0,1.0,18,High (铁证),无异常，完美1对1
+1321,L4149,11.0,Axel Calzas,Engineering,Hydraulic Technician,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+7108,L6544,12.0,Hideki Cocinaro,Security,Site Control,100.00%,1.0,1.0,16,High (铁证),无异常，完美1对1
+7819,L5259,13.0,Inga Ferro,Security,Site Control,100.00%,1.0,1.0,27,High (铁证),无异常，完美1对1
+1874,L4424,14.0,Lidelse Dedos,Engineering,Engineering Group Manager,100.00%,1.0,1.0,25,High (铁证),无异常，完美1对1
+3853,L1485,15.0,Loreto Bodrogi,Security,Site Control,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+7354,L9254,16.0,Isia Vann,Security,Perimeter Control,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+8411,L6110,17.0,Sven Flecha,Information Technology,IT Technician,100.00%,1.0,1.0,27,High (铁证),无异常，完美1对1
+9617,L5553,18.0,Birgitta Frente,Engineering,Geologist,100.00%,1.0,1.0,26,High (铁证),无异常，完美1对1
+6895,L3366,19.0,Vira Frente,Engineering,Hydraulic Technician,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+6816,L8148,20.0,Stenig Fusil,Security,Building Control,100.00%,1.0,1.0,20,High (铁证),无异常，完美1对1
+4434,L2169,24.0,Minke Mies,Security,Perimeter Control,100.00%,1.0,1.0,26,High (铁证),无异常，完美1对1
+1310,L8012,26.0,Marin Onda,Engineering,Drill Site Manager,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+3492,L7814,27.0,Kare Orilla,Engineering,Drill Technician,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+5010,L2459,31.0,Sten Sanjorge Jr.,Executive,President/CEO,100.00%,1.0,1.0,5,High (铁证),无异常，完美1对1
+8156,L5224,32.0,Orhan Strum,Executive,SVP/COO,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+9683,L7291,33.0,Brand Tempestad,Engineering,Drill Technician,100.00%,1.0,1.0,18,High (铁证),无异常，完美1对1

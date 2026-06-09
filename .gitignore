@@ -1,0 +1,23 @@
+node_modules/ 
+# --- Python 环境与依赖 ---
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- PyCharm/IDE 配置 (最重要！) ---
+.idea/
+*.iml
+
+# --- 系统与编辑器生成的杂项 ---
+.DS_Store
+Thumbs.db
+.vscode/
+
+# --- 数据分析项目可能产生的临时文件 ---
+.ipynb_checkpoints/
+*.log
+*.tmp

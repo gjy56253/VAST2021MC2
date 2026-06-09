@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAST 2014 - 终极物理对齐控制台</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        #map { width: 100vw; height: 100vh; background-color: #222; }
+        
+        .control-panel {
+            position: absolute; top: 15px; right: 15px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); padding: 15px;
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 320px;
+        }
+        .control-panel h3 { margin: 0 0 10px 0; font-size: 16px; border-bottom: 2px solid #ccc; padding-bottom: 5px;}
+        .btn-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 10px; }
+        .btn { background: #f0f0f0; border: 1px solid #ccc; padding: 6px 0; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 12px;}
+        .btn:hover { background: #e0e0e0; }
+        .btn-empty { background: transparent; border: none; }
+        .code-box { background: #272822; color: #a6e22e; font-family: monospace; padding: 10px; border-radius: 4px; font-size: 12px; margin-top: 10px; word-wrap: break-word;}
+        .loading { color: #d9534f; font-weight: bold; font-size: 12px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <h3>🎯 终极物理对齐控制台</h3>
+        
+        <label style="font-size: 12px; font-weight: bold;">🗺️ 虚拟地图透明度:</label>
+        <input type="range" id="opacitySlider" min="0" max="1" step="0.1" value="0.5" style="width:100%; margin-bottom: 10px;">
+        
+        <div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">📍 整体平移 (步长: 0.001)</div>
+        <div class="btn-group">
+            <div class="btn-empty"></div><button class="btn" onclick="move('N')">上 (N)</button><div class="btn-empty"></div>
+            <button class="btn" onclick="move('W')">左 (W)</button><button class="btn" onclick="move('S')">下 (S)</button><button class="btn" onclick="move('E')">右 (E)</button>
+        </div>
+
+        <div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">📐 边缘缩放 (步长: 0.0005)</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+            <button class="btn" onclick="stretch('N', 1)">北 +</button><button class="btn" onclick="stretch('N', -1)">北 -</button>
+            <button class="btn" onclick="stretch('S', -1)">南 +</button><button class="btn" onclick="stretch('S', 1)">南 -</button>
+            <button class="btn" onclick="stretch('E', 1)">东 +</button><button class="btn" onclick="stretch('E', -1)">东 -</button>
+            <button class="btn" onclick="stretch('W', -1)">西 +</button><button class="btn" onclick="stretch('W', 1)">西 -</button>
+        </div>
+
+        <div id="status" class="loading">⏳ 正在加载真实路网与 GPS 数据...</div>
+        
+        <div style="font-size: 12px; font-weight: bold; margin-top: 10px;">✅ 完美对齐后的边界系:</div>
+        <div class="code-box" id="bounds-output">等待初始化...</div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
+    <script>
+        // 1. 初始化真实地理底图 (使用高对比度的 CartoDB 底图，类似 Google Maps 风格)
+        const map = L.map('map').setView([36.068, 24.868], 14);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO',
+            maxZoom: 19
+        }).addTo(map);
+
+        // 2. 加载虚拟旅游图 (初始大致坐标)
+        let bounds = [
+            [36.04500, 36.04500], // 南西
+            [36.09550,  24.91000]  // 北东
+        ];
+        // 确保你的 JPG 文件名正确！
+        const touristMap = L.imageOverlay('./MC2-tourist.jpg', bounds, { opacity: 0.5 }).addTo(map);
+
+        // 更新边界显示
+        function updateBounds() {
+            touristMap.setBounds(bounds);
+            document.getElementById('bounds-output').innerText = 
+                `[\n  [${bounds[0][0].toFixed(5)}, ${bounds[0][1].toFixed(5)}],\n  [${bounds[1][0].toFixed(5)}, ${bounds[1][1].toFixed(5)}]\n]`;
+        }
+        updateBounds();
+
+        // 3. 加载真实的 GeoJSON 路网
+        fetch('./Geospatial/Abila.geojson')// 确保路径正确
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: { color: "#ff0000", weight: 3, opacity: 0.8 } // 红色粗线代表真实物理路网
+                }).addTo(map);
+            }).catch(e => console.log("GeoJSON加载失败，请检查路径:", e));
+
+        // 4. 加载并抽样绘制真实 GPS 轨迹
+        fetch('./gps.csv') // 确保路径正确
+            .then(response => response.text())
+            .then(csvText => {
+                Papa.parse(csvText, {
+                    header: true,
+                    dynamicTyping: true,
+                    complete: function(results) {
+                        const data = results.data;
+                        // 降采样：每 500 个点取 1 个，防止浏览器卡死
+                        for(let i = 0; i < data.length; i += 500) {
+                            if(data[i].lat && data[i].long) {
+                                L.circleMarker([data[i].lat, data[i].long], {
+                                    radius: 2, color: '#0055ff', fillOpacity: 1, stroke: false
+                                }).addTo(map); // 蓝色小圆点代表真实车辆走过的轨迹
+                            }
+                        }
+                        document.getElementById('status').innerText = "✅ 真实路网(红)与GPS轨迹(蓝)已加载完成！";
+                        document.getElementById('status').style.color = "#5cb85c";
+                    }
+                });
+            });
+
+        // 交互控制逻辑
+        window.move = function(dir) {
+            const step = 0.001;
+            if(dir === 'N') { bounds[0][0]+=step; bounds[1][0]+=step; }
+            if(dir === 'S') { bounds[0][0]-=step; bounds[1][0]-=step; }
+            if(dir === 'E') { bounds[0][1]+=step; bounds[1][1]+=step; }
+            if(dir === 'W') { bounds[0][1]-=step; bounds[1][1]-=step; }
+            updateBounds();
+        };
+
+        window.stretch = function(edge, sign) {
+            const step = 0.0005 * sign;
+            if(edge === 'N') bounds[1][0] += step;
+            if(edge === 'S') bounds[0][0] -= step; // 往南延伸是减小
+            if(edge === 'E') bounds[1][1] += step;
+            if(edge === 'W') bounds[0][1] -= step; // 往西延伸是减小
+            updateBounds();
+        };
+
+        document.getElementById('opacitySlider').addEventListener('input', e => {
+            touristMap.setOpacity(e.target.value);
+        });
+    </script>
+</body>
+</html>

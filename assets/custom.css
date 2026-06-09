@@ -1,0 +1,26 @@
+/* assets/custom.css */
+
+/* 只有在执行“打印为PDF”时，这段代码才会生效 */
+@media print {
+    /* 1. 隐藏左侧导航栏，因为纸质版点不了跳转 */
+    .sticky-top {
+        display: none !important;
+    }
+
+    /* 2. 让右侧主体内容占据 100% 的宽度，不要留出左边的空白 */
+    .col-md-9, .col-12 {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    /* 3. 防止代码框或图片被硬生生切成两半（跨页断层） */
+    pre, img, .card {
+        page-break-inside: avoid;
+    }
+
+    /* 4. 隐藏顶部的全站导航栏（如果你有的话） */
+    .navbar {
+        display: none !important;
+    }
+}

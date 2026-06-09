@@ -1,0 +1,63 @@
+﻿last4ccnum,loyaltynum,Matched_CarID,FullName,CurrentEmploymentType,CurrentEmploymentTitle,Inference_Probability_Str,Car_Share_Prob,Loyalty_Share_Prob,Match_Count,Certainty_Level,Uncertainty_Reason
+4434,L2169,24.0,Minke Mies,Security,Perimeter Control,100.00%,1.0,1.0,26,High (铁证),无异常，完美1对1
+7819,L5259,13.0,Inga Ferro,Security,Site Control,100.00%,1.0,1.0,27,High (铁证),无异常，完美1对1
+7108,L6544,12.0,Hideki Cocinaro,Security,Site Control,100.00%,1.0,1.0,16,High (铁证),无异常，完美1对1
+3853,L1485,15.0,Loreto Bodrogi,Security,Site Control,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+8411,L6110,17.0,Sven Flecha,Information Technology,IT Technician,100.00%,1.0,1.0,27,High (铁证),无异常，完美1对1
+3492,L7814,27.0,Kare Orilla,Engineering,Drill Technician,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+7688,L4164,4.0,Ingrid Barranco,Executive,SVP/CFO,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+9683,L7291,33.0,Brand Tempestad,Engineering,Drill Technician,100.00%,1.0,1.0,18,High (铁证),无异常，完美1对1
+8156,L5224,32.0,Orhan Strum,Executive,SVP/COO,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+6816,L8148,20.0,Stenig Fusil,Security,Building Control,100.00%,1.0,1.0,20,High (铁证),无异常，完美1对1
+2540,L5947,7.0,Elsa Orilla,Engineering,Drill Technician,100.00%,1.0,1.0,20,High (铁证),无异常，完美1对1
+7354,L9254,16.0,Isia Vann,Security,Perimeter Control,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+1877,L3014,9.0,Gustav Cazar,Engineering,Drill Technician,100.00%,1.0,1.0,18,High (铁证),无异常，完美1对1
+1874,L4424,14.0,Lidelse Dedos,Engineering,Engineering Group Manager,100.00%,1.0,1.0,25,High (铁证),无异常，完美1对1
+9617,L5553,18.0,Birgitta Frente,Engineering,Geologist,100.00%,1.0,1.0,26,High (铁证),无异常，完美1对1
+1321,L4149,11.0,Axel Calzas,Engineering,Hydraulic Technician,100.00%,1.0,1.0,22,High (铁证),无异常，完美1对1
+1310,L8012,26.0,Marin Onda,Engineering,Drill Site Manager,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+9635,L3191,3.0,Felix Balas,Engineering,Engineer,100.00%,1.0,1.0,24,High (铁证),无异常，完美1对1
+6895,L3366,19.0,Vira Frente,Engineering,Hydraulic Technician,100.00%,1.0,1.0,21,High (铁证),无异常，完美1对1
+5010,L2459,31.0,Sten Sanjorge Jr.,Executive,President/CEO,100.00%,1.0,1.0,5,High (铁证),无异常，完美1对1
+7384,L3800,23.0,Varja Lagos,Security,Badging Office,20.95%,0.2095435684647303,1.0,26,Low (高危),一车绑多卡(车主概率:21%)
+7792,L5756,105.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,20,Low (高危),公共卡车(幽灵集群)
+7889,L2247,8.0,Lucas Alcazar,Information Technology,IT Technician,3.51%,0.7368421052631579,0.047619047619047616,1,Low (高危),一车绑多卡(车主概率:74%) | 积分卡交叉互用(交易共现概率:5%)
+7889,L6119,8.0,Lucas Alcazar,Information Technology,IT Technician,70.18%,0.7368421052631579,0.9523809523809523,20,Low (高危),一车绑多卡(车主概率:74%) | 积分卡交叉互用(交易共现概率:95%)
+1286,L3288,22.0,Adra Nubarron,Security,Badging Office,53.57%,1.0,0.5357142857142857,15,Low (高危),积分卡交叉互用(交易共现概率:54%)
+8202,L2343,6.0,Linnea Bergen,Information Technology,IT Group Manager,9.17%,0.09173478655767484,1.0,25,Low (高危),一车绑多卡(车主概率:9%)
+8332,L2070,10.0,Ada Campo-Corrente,Executive,SVP/CIO,96.43%,1.0,0.9642857142857143,27,Low (高危),积分卡交叉互用(交易共现概率:96%)
+8332,L8566,10.0,Ada Campo-Corrente,Executive,SVP/CIO,3.57%,1.0,0.03571428571428571,1,Low (高危),积分卡交叉互用(交易共现概率:4%)
+8642,L2769,,无车基层员工,未知,未知,11.11%,0.1111111111111111,1.0,12,Low (高危),无物理轨迹(幽灵集群)
+9152,L5485,105.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,2,Low (高危),公共卡车(幽灵集群)
+9220,L4063,101.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,9,Low (高危),公共卡车(幽灵集群)
+9241,L3288,5.0,Isak Baza,Information Technology,IT Technician,17.40%,0.17396332397158432,1.0,13,Low (高危),一车绑多卡(车主概率:17%) | 积分卡交叉互用(交易共现概率:100%)
+9405,L3259,21.0,Hennie Osvaldo,Security,Perimeter Control,88.57%,0.8857395925597874,1.0,21,Low (高危),一车绑多卡(车主概率:89%)
+9551,L5777,1.0,Nils Calixto,Information Technology,IT Helpdesk,52.16%,0.5216119597010075,1.0,12,Low (高危),一车绑多卡(车主概率:52%)
+9614,L5924,2.0,Lars Azada,Engineering,Engineer,79.47%,0.7946598855689765,1.0,2,Low (高危),一车绑多卡(车主概率:79%)
+8129,L8328,8.0,Lucas Alcazar,Information Technology,IT Technician,26.32%,0.2631578947368421,1.0,21,Low (高危),一车绑多卡(车主概率:26%)
+7253,L1682,6.0,Linnea Bergen,Information Technology,IT Group Manager,90.83%,0.9082652134423251,1.0,24,Low (高危),一车绑多卡(车主概率:91%)
+6691,L6267,1.0,Nils Calixto,Information Technology,IT Helpdesk,29.16%,0.2916260426822663,1.0,20,Low (高危),一车绑多卡(车主概率:29%) | 积分卡交叉互用(交易共现概率:100%)
+6901,L9363,30.0,Felix Resumir,Security,Security Group Manager,58.68%,0.5868306801736614,1.0,28,Low (高危),一车绑多卡(车主概率:59%)
+1286,L3572,22.0,Adra Nubarron,Security,Badging Office,46.43%,1.0,0.4642857142857143,13,Low (高危),积分卡交叉互用(交易共现概率:46%)
+1415,L7783,2.0,Lars Azada,Engineering,Engineer,10.27%,0.10267005721551176,1.0,24,Low (高危),一车绑多卡(车主概率:10%)
+2142,L9637,25.0,Kanon Herrero,Engineering,Geologist,77.24%,0.7724086661002549,1.0,25,Low (高危),一车绑多卡(车主概率:77%)
+2276,L3317,106.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,10,Low (高危),公共卡车(幽灵集群)
+2418,L9018,25.0,Kanon Herrero,Engineering,Geologist,22.76%,0.22759133389974512,1.0,20,Low (高危),一车绑多卡(车主概率:23%)
+2463,L6886,,无车基层员工,未知,未知,11.11%,0.1111111111111111,1.0,23,Low (高危),无物理轨迹(幽灵集群)
+2681,L1107,1.0,Nils Calixto,Information Technology,IT Helpdesk,18.68%,0.18676199761672624,1.0,20,Low (高危),一车绑多卡(车主概率:19%)
+3484,L2490,23.0,Varja Lagos,Security,Badging Office,79.05%,0.7904564315352698,1.0,24,Low (高危),一车绑多卡(车主概率:79%)
+3506,L7761,101.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,6,Low (高危),公共卡车(幽灵集群)
+3547,L9362,29.0,Bertrand Ovan,Facilities,Facilities Group Manager,50.45%,0.5045090496310778,1.0,14,Low (高危),一车绑多卡(车主概率:50%)
+4530,L8477,107.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,10,Low (高危),公共卡车(幽灵集群)
+4795,L2070,34.0,Edvard Vann,Security,Perimeter Control,3.85%,1.0,0.038461538461538464,1,Low (高危),积分卡交叉互用(交易共现概率:4%)
+4795,L8566,34.0,Edvard Vann,Security,Perimeter Control,96.15%,1.0,0.9615384615384616,25,Low (高危),积分卡交叉互用(交易共现概率:96%)
+4948,L3295,28.0,Isande Borrasca,Engineering,Drill Technician,4.35%,1.0,0.043478260869565216,1,Low (高危),积分卡交叉互用(交易共现概率:4%)
+4948,L9406,28.0,Isande Borrasca,Engineering,Drill Technician,95.65%,1.0,0.9565217391304348,22,Low (高危),积分卡交叉互用(交易共现概率:96%)
+5368,L2247,30.0,Felix Resumir,Security,Security Group Manager,39.66%,0.41316931982633864,0.96,24,Low (高危),一车绑多卡(车主概率:41%) | 积分卡交叉互用(交易共现概率:96%)
+5368,L6119,30.0,Felix Resumir,Security,Security Group Manager,1.65%,0.41316931982633864,0.04,1,Low (高危),一车绑多卡(车主概率:41%) | 积分卡交叉互用(交易共现概率:4%)
+5407,L4034,21.0,Hennie Osvaldo,Security,Perimeter Control,11.43%,0.11426040744021257,1.0,20,Low (高危),一车绑多卡(车主概率:11%)
+5921,L3295,29.0,Bertrand Ovan,Facilities,Facilities Group Manager,45.74%,0.4954909503689222,0.9230769230769231,12,Low (高危),一车绑多卡(车主概率:50%) | 积分卡交叉互用(交易共现概率:92%)
+5921,L9406,29.0,Bertrand Ovan,Facilities,Facilities Group Manager,3.81%,0.4954909503689222,0.07692307692307693,1,Low (高危),一车绑多卡(车主概率:50%) | 积分卡交叉互用(交易共现概率:8%)
+6899,L6267,5.0,Isak Baza,Information Technology,IT Technician,82.60%,0.8260366760284157,1.0,23,Low (高危),一车绑多卡(车主概率:83%) | 积分卡交叉互用(交易共现概率:100%)
+7117,L6417,2.0,Lars Azada,Engineering,Engineer,10.27%,0.10267005721551176,1.0,28,Low (高危),一车绑多卡(车主概率:10%)
+9735,L9633,107.0,未定业务人员,跨部门调用,现场作业,11.11%,0.1111111111111111,1.0,16,Low (高危),公共卡车(幽灵集群)

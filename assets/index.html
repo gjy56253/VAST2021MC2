@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAST 2014 - 坐标拾取与雷达系统</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #222; }
+        #map { width: 100vw; height: 100vh; background-color: #333; }
+        
+        /* 左上角：坐标雷达显示器 */
+        .radar-panel {
+            position: absolute; top: 20px; left: 20px; z-index: 1000;
+            background: rgba(15, 20, 25, 0.9); color: #00ffcc;
+            padding: 15px 25px; border-radius: 6px; border: 1px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            pointer-events: none; /* 让鼠标事件穿透这个框，不影响地图拖拽 */
+        }
+        .radar-panel h3 { margin: 0 0 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #fff;}
+        .coord-display { font-family: monospace; font-size: 18px; line-height: 1.5; }
+        
+        /* 右上角：控制台 */
+        .control-panel {
+            position: absolute; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); padding: 15px 20px;
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 250px;
+        }
+        .control-panel h3 { margin-top: 0; font-size: 15px; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        
+        /* 自定义开关样式 */
+        .switch-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .switch-container label { font-size: 14px; color: #444; font-weight: bold; cursor: pointer;}
+        
+        /* 准星十字 */
+        .leaflet-grab { cursor: crosshair !important; }
+        .leaflet-dragging .leaflet-grab { cursor: grabbing !important; }
+    </style>
+</head>
+<body>
+
+    <div class="radar-panel">
+        <h3>📍 实时经纬度侦测 (WGS84)</h3>
+        <div class="coord-display" id="lat-display">Lat: 等待扫描...</div>
+        <div class="coord-display" id="lon-display">Lon: 等待扫描...</div>
+    </div>
+
+    <div class="control-panel">
+        <h3>⚙️ 地图图层控制</h3>
+        
+        <div class="switch-container">
+            <label for="toggle-basemap">🌍 显示底层真实地图</label>
+            <input type="checkbox" id="toggle-basemap">
+        </div>
+        
+        <div class="switch-container">
+            <label for="toggle-vector">🛣️ 显示蓝绿矢量路线</label>
+            <input type="checkbox" id="toggle-vector">
+        </div>
+        
+        <div style="font-size: 12px; color: #777; margin-top: 10px; line-height: 1.4;">
+            * 提示：视野已被严格锁定在虚拟地图区域内。您可以将鼠标悬停在任何商铺上以获取其精确坐标。
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. 定义你校准出的最精准边界 (已更新为最新坐标)
+        const exactBounds = [
+            [36.04500, 24.82450], // 南、西
+            [36.09550, 24.91000]  // 北、东
+        ];
+
+        // 2. 初始化地图，开启“视野锁死”模式
+        const map = L.map('map', {
+            maxBounds: exactBounds, // 严格限制平移区域，出不去这个框
+            maxBoundsViscosity: 1.0, // 碰到边界时的反弹阻力（1.0代表完全禁止拖出边界）
+            minZoom: 13, // 限制最小缩放级别，防止缩小看全世界
+            zoomControl: true 
+        });
+
+        // 将镜头完美充满这个边界
+        map.fitBounds(exactBounds);
+
+        // ==========================================
+        // 图层初始化 (默认全部不在地图上显示)
+        // ==========================================
+        
+        // A. 底层真实世界地图
+        const realWorldBase = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 });
+
+        // B. 蓝绿矢量道路层 (GeoJSON)
+        const vectorGroup = L.featureGroup();
+        fetch('./Geospatial/Kronos_Island.geojson').then(r=>r.json()).then(d => {
+            L.geoJSON(d, {style: {color: "#28a745", weight: 2, fillOpacity: 0.1}}).addTo(vectorGroup);
+        }).catch(e => console.log("Kronos 数据未找到"));
+        
+        fetch('./Geospatial/Abila.geojson').then(r=>r.json()).then(d => {
+            L.geoJSON(d, {style: {color: "#3388ff", weight: 1.5}}).addTo(vectorGroup);
+        }).catch(e => console.log("Abila 数据未找到"));
+
+        // C. 卡通旅游图 (这个是永远显示的主体，且不透明度为 100%)
+        const touristMapLayer = L.imageOverlay('./MC2-tourist.jpg', exactBounds, {
+            opacity: 1.0, zIndex: 10 // 确保它永远在底图之上
+        }).addTo(map);
+
+        // ==========================================
+        // 核心交互：UI 开关控制图层显隐
+        // ==========================================
+        
+        document.getElementById('toggle-basemap').addEventListener('change', function(e) {
+            if(e.target.checked) {
+                map.addLayer(realWorldBase);
+                touristMapLayer.setOpacity(0.6); // 显示底图时，旅游图变半透明方便对比
+            } else {
+                map.removeLayer(realWorldBase);
+                touristMapLayer.setOpacity(1.0); // 关掉底图时，旅游图恢复 100% 实体
+            }
+        });
+
+        document.getElementById('toggle-vector').addEventListener('change', function(e) {
+            if(e.target.checked) {
+                map.addLayer(vectorGroup);
+            } else {
+                map.removeLayer(vectorGroup);
+            }
+        });
+
+        // ==========================================
+        // 终极武器：鼠标悬停坐标雷达
+        // ==========================================
+        
+        const latDisplay = document.getElementById('lat-display');
+        const lonDisplay = document.getElementById('lon-display');
+
+        // 监听地图上的鼠标移动事件
+        map.on('mousemove', function(e) {
+            // 获取当前鼠标位置的精确经纬度，已修改为保留 7 位小数
+            const lat = e.latlng.lat.toFixed(7);
+            const lon = e.latlng.lng.toFixed(7);
+            
+            // 实时更新左上角的面板面板
+            latDisplay.innerText = `Lat: ${lat}`;
+            lonDisplay.innerText = `Lon: ${lon}`;
+        });
+
+    </script>
+</body>
+</html>
