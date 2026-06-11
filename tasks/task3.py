@@ -232,9 +232,7 @@ def get_layout():
 
                     html.Div([
                         html.Strong("被审计无车人员九人名单"), html.Br(),
-                        "Albina Prasert, Benito Corrales, Claudio Carriara, Henk Bodrogi, Isia Vann, Irene Vance 属于公共卡车调用群体",
-                        html.Br(),
-                        "Marelisa Shavan, Adra Ganes, Lucas Alcazar 属于无可见轨迹群体"
+                        "Hafon Albina, Hawelon Benito, Hawelon Claudio, Mies Henk, Morlun Valeria, Morlun Adan, Morluniau Cecilia, Nant	Irene, Scozzese	Dylan"
                     ], className="p-3 bg-white border rounded small text-dark mb-0")
                 ]), className="mb-5 shadow-sm border-0 bg-light border-start border-secondary border-4"),
 

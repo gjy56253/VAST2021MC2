@@ -1,26 +1,52 @@
 /* assets/custom.css */
 
-/* 只有在执行“打印为PDF”时，这段代码才会生效 */
 @media print {
-    /* 1. 隐藏左侧导航栏，因为纸质版点不了跳转 */
-    .sticky-top {
+    /* 保留背景色/图 */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* 只隐藏真正不需要打印的交互控件（如按钮、滑块等） */
+    .btn,
+    .dcc-dropdown,
+    .rc-slider,
+    .dcc-slider,
+    .dash-debug-menu {
         display: none !important;
     }
 
-    /* 2. 让右侧主体内容占据 100% 的宽度，不要留出左边的空白 */
-    .col-md-9, .col-12 {
-        width: 100% !important;
-        max-width: 100% !important;
-        flex: 0 0 100% !important;
+    /*
+      原规则里 .sticky-top 和 .navbar 的隐藏已删除。
+      如果导航栏或目录还用到 .sticky-top 并且你想保留它，
+      就不要写 display:none。如果你有其他悬浮元素（比如“返回顶部”按钮）
+      不想打印，可以单独加 .no-print 类，或用更精确的选择器。
+    */
+
+    /*
+      原规则里强制 .col-md-9, .col-12 全宽的代码已删除，
+      这样左右分栏（目录+内容）会完全保持屏幕上的比例。
+    */
+
+    /* 避免跨页截断 */
+    pre,
+    img,
+    .card,
+    .js-plotly-plot {
+        page-break-inside: avoid !important;
     }
 
-    /* 3. 防止代码框或图片被硬生生切成两半（跨页断层） */
-    pre, img, .card {
-        page-break-inside: avoid;
+    /* ==========================================
+       Tab 自动展开打印（保持不变）
+       ========================================== */
+    .tab-content > .tab-pane {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        page-break-before: always;
+        padding-top: 20px !important;
     }
-
-    /* 4. 隐藏顶部的全站导航栏（如果你有的话） */
-    .navbar {
+    .nav-tabs {
         display: none !important;
     }
 }

@@ -35,7 +35,7 @@ layout = html.Div([
             # 内部文本强制左对齐 (text-start)
             html.Div([
                 html.P([html.Strong("课程名称："), "数据可视化"], className="mb-2 text-dark fs-5"),
-                html.P([html.Strong("团队作者："), "XX"], className="mb-2 text-dark fs-5"),
+                html.P([html.Strong("团队作者："), "高嘉钰、周雨欣、杨彤、张倚晨、贺祥宇"], className="mb-2 text-dark fs-5"),
                 html.P([html.Strong("发布日期："), "2026年6月12日"], className="mb-0 text-dark fs-5"),
             ], className="text-start")
 
