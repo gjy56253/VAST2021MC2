@@ -235,38 +235,39 @@ def _build_narrative_flow():
     return fig
 
 
+
+# ===================== 莫兰迪案件阶段色卡 =====================
+PHASE_COLORS = {
+    "gather": "#8D99AE",  # 阶段一 (聚集)：雾霾蓝 - 平静下的暗流
+    "escalate": "#D4A373",  # 阶段二 (升级)：浅驼色 - 迹象显露，开始预警
+    "fund": "#A58D9A",  # 阶段三 (资金)：柔梅紫 - 核心大额交易，隐秘而关键
+    "act": "#B98B82",  # 阶段四 (行动)：柔砖红 - 危险动作爆发（遗弃车辆、凌晨作案）
+    "silence": "#5C6B73"  # 阶段五 (沉寂)：深青灰 - 案发后静默潜藏
+}
+
+
 def _build_key_timeline():
     """精简版宏观时间线（全参数合规 · 彻底修复所有报错）"""
     fig = go.Figure()
 
-    # 你最终确定的事件文案
+    # 事件文案与对应阶段的莫兰迪色彩绑定
     events = [
-        {"date": "1/6 - 1/15", "text": "Hippokampos出现人车分离规律聚集",
-         "color": PHASE_COLORS["gather"]},
-        {"date": "1/12  19:00", "text": "聚集时间由21时前移至19时",
-         "color": PHASE_COLORS["escalate"]},
-        {"date": "1/12  03:39", "text": "Orhan Strum于Kronos Mart交易$277",
-         "color": PHASE_COLORS["escalate"]},
-        {"date": "1/13  19:20", "text": "Nils Calixto于Frydos进行$10,000大额交易",
-         "color": PHASE_COLORS["fund"]},
-        {"date": "1/13  19:30", "text": "同卡于Ouzeri Elian交易$28.75恢复身份",
-         "color": PHASE_COLORS["fund"]},
-        {"date": "1/18  19:00", "text": "三名嫌疑人遗弃公司车辆",
-         "color": PHASE_COLORS["act"]},
-        {"date": "1/19  03:13", "text": "Varja Lagos于Kronos Mart交易$87.66",
-         "color": PHASE_COLORS["act"]},
-        {"date": "1/19  03:45", "text": "Nils Calixto于Kronos Mart交易$194.51",
-         "color": PHASE_COLORS["act"]},
-        {"date": "1/19  03:48", "text": "Ada Campo-Corrente于Kronos Mart交易$150.36",
-         "color": PHASE_COLORS["act"]},
-        {"date": "1/19  13:00+", "text": "错峰重现",
-         "color": PHASE_COLORS["silence"]},
+        {"date": "1/6 - 1/15", "text": "Hippokampos出现人车分离规律聚集", "color": PHASE_COLORS["gather"]},
+        {"date": "1/12  19:00", "text": "聚集时间由21时前移至19时", "color": PHASE_COLORS["escalate"]},
+        {"date": "1/12  03:39", "text": "Orhan Strum于Kronos Mart交易$277", "color": PHASE_COLORS["escalate"]},
+        {"date": "1/13  19:20", "text": "Nils Calixto于Frydos进行$10,000大额交易", "color": PHASE_COLORS["fund"]},
+        {"date": "1/13  19:30", "text": "同卡于Ouzeri Elian交易$28.75恢复身份", "color": PHASE_COLORS["fund"]},
+        {"date": "1/18  19:00", "text": "三名嫌疑人遗弃公司车辆", "color": PHASE_COLORS["act"]},
+        {"date": "1/19  03:13", "text": "Varja Lagos于Kronos Mart交易$87.66", "color": PHASE_COLORS["act"]},
+        {"date": "1/19  03:45", "text": "Nils Calixto于Kronos Mart交易$194.51", "color": PHASE_COLORS["act"]},
+        {"date": "1/19  03:48", "text": "Ada Campo-Corrente于Kronos Mart交易$150.36", "color": PHASE_COLORS["act"]},
+        {"date": "1/19  13:00+", "text": "错峰重现", "color": PHASE_COLORS["silence"]},
     ]
 
     y_labels = [e["date"] for e in events]
     colors = [e["color"] for e in events]
 
-    # 1. 绘制拉长的横向条形图（宽度=3，空间充足）
+    # 1. 绘制拉长的横向条形图
     fig.add_trace(go.Bar(
         x=[3] * len(events),
         y=y_labels,
@@ -276,7 +277,7 @@ def _build_key_timeline():
         showlegend=False,
     ))
 
-    # 2. 逐行渲染文本 + 自动适配文字颜色（解决列表/textcolor报错）
+    # 2. 逐行渲染文本 + 自动适配文字颜色
     for item in events:
         color_hex = item["color"]
         # 十六进制颜色转亮度，判断文字颜色
@@ -286,21 +287,21 @@ def _build_key_timeline():
         brightness = (r * 299 + g * 587 + b * 114) / 1000
 
         # 深色背景白字，浅色背景深灰字
-        txt_color = "#FFFFFF" if brightness < 130 else "#2C3E50"
+        txt_color = "#FFFFFF" if brightness < 150 else "#2C3E50"
 
-        # 单条独立文本轨迹，textfont 仅用合法参数 size / color
+        # 单条独立文本轨迹，实现完美居中
         fig.add_trace(go.Scatter(
-            x=[1.5],          # 条形水平中点，实现居中
+            x=[1.5],
             y=[item["date"]],
             mode="text",
             text=[item["text"]],
             textposition="middle center",
-            textfont=dict(size=10.5, color=txt_color),
+            textfont=dict(size=11, color=txt_color),  # 字体稍微调大一点点使其更清晰
             hoverinfo="skip",
             showlegend=False
         ))
 
-    # 3. 右侧阶段标签（已删除非法 weight 属性，纯合规写法）
+    # 3. 右侧阶段标签
     phase_labels = [
         {"y": "1/6 - 1/15", "label": "阶段一", "color": PHASE_COLORS["gather"]},
         {"y": "1/12  19:00", "label": "阶段二", "color": PHASE_COLORS["escalate"]},
@@ -308,28 +309,28 @@ def _build_key_timeline():
         {"y": "1/18  19:00", "label": "阶段四", "color": PHASE_COLORS["act"]},
         {"y": "1/19  13:00+", "label": "阶段五", "color": PHASE_COLORS["silence"]},
     ]
+
     for pl in phase_labels:
         fig.add_trace(go.Scatter(
-            x=[3.25],
+            x=[3.15],  # 将标签往左稍微收一点，避免紧贴边缘
             y=[pl["y"]],
             mode="text",
             text=[pl["label"]],
-            textposition="middle left",
-            # 仅保留合法参数：size + color，移除 weight
-            textfont=dict(size=10, color=pl["color"]),
+            textposition="middle right",  # 改为 middle right 让文字向右延伸更自然
+            textfont=dict(size=11, color=pl["color"]),
             hoverinfo="skip",
             showlegend=False
         ))
 
-    # 4. 布局配置（坐标轴、边距、高度全部适配）
+    # 4. 布局配置优化（坐标轴、边距适配）
     fig.update_layout(
-        xaxis=dict(visible=False, range=[-0.2, 4.0]),
-        yaxis=dict(type="category", autorange="reversed", tickfont=dict(size=10)),
-        bargap=0.3,
+        xaxis=dict(visible=False, range=[-0.2, 3.8]),  # 微调了 X 轴范围，让右侧文字留白更舒适
+        yaxis=dict(type="category", autorange="reversed", tickfont=dict(size=11, color="#4A4A4A")),
+        bargap=0.35,  # 稍微拉大一点条形之间的间距，增加呼吸感
         plot_bgcolor="white",
         paper_bgcolor="white",
-        margin=dict(l=110, r=65, t=15, b=15),
-        height=430,
+        margin=dict(l=100, r=30, t=15, b=15),
+        height=450
     )
 
     return fig
@@ -866,11 +867,22 @@ main_content = html.Div([
     ]), className="mb-4 shadow-sm border-0 bg-white"),
 
     # 1.2 关键时间线
+    # ---- 1.2 关键时间线 ----
     html.H5("1.2 关键时间线", id="section-1-2", className="fw-bold mb-3 mt-4 pt-3 border-top",
             style={"color": "#2C3E50"}),
-    dbc.Card(dbc.CardBody([
-        dcc.Graph(figure=_build_key_timeline(), style={"height": "400px"}, **_GRAPH_CFG),
-    ]), className="mb-4 shadow-sm border-0 bg-white"),
+
+    dbc.Card(
+        dbc.CardBody([
+            dcc.Graph(
+                figure=_build_key_timeline(),
+                # 优化：将高度调整为 450px，与后台函数的绘图高度保持绝对对齐
+                style={"height": "450px", "width": "100%"},
+                # 优化：显式注入前端组件特有的 config 属性，隐藏右上角工具栏，防止混入 Layout 引发报错
+                config={"displayModeBar": True, "responsive": True}
+            ),
+        ]),
+        className="mb-4 shadow-sm border-0 bg-white"
+    ),
     html.P(
         "1月12日聚集时间前移是首个转折信号；1月13日$10,000大额交易标志着资金准备阶段；"
         "1月19日凌晨三名分属不同社团的嫌疑人在Kronos Mart精准汇合，"
@@ -886,7 +898,7 @@ main_content = html.Div([
         dcc.Graph(figure=_build_social_network(), style={"height": "420px"}, **_GRAPH_CFG),
     ]), className="mb-4 shadow-sm border-0 bg-white"),
     html.P(
-        "两个主要社团通过Ada Campo-Corrente桥接，她是全网络的信息中转枢纽。"
+        "两个主要社团通过Ada Campo-Corrente桥接，他是全网络的信息中转枢纽，"
         "四名嫌疑人分属三个社团、三个部门，却在凌晨交易中精准汇合——"
         "这一模式与偶然重叠不符。",
         className="text-muted mb-5",
@@ -902,7 +914,7 @@ main_content = html.Div([
     html.P(
         "1月6日至15日，嫌疑人每晚约21时在Hippokampos聚集，而公司车辆统一停放于"
         "Albert's Fine Clothing——形成系统性人车分离。1月12日聚集时间异常前移至19时，"
-        "随后即发生首次凌晨异常交易（03:39）。",
+        "随后即发生首次凌晨3点异常交易。",
         className="text-muted mb-5",
         style={"textAlign": "justify", "lineHeight": "1.8", "fontSize": "1.05rem"}
     ),
@@ -918,7 +930,7 @@ main_content = html.Div([
     ]), className="mb-3 shadow-sm border-0 bg-white"),
     html.P(
         "1月12日聚集前移至19时，7小时后Orhan Strum于03:39完成首次Kronos Mart凌晨交易；"
-        "1月13日Nils Calixto关联信用卡在Frydos消费$10,000，10分钟内即在同一张卡上"
+        "而1月13日Nils Calixto关联信用卡在Frydos消费$10,000，10分钟内即在同一张卡上"
         "恢复会员卡记录——呈现\"异常交易→身份恢复\"模式。",
         className="text-muted mb-4",
         style={"textAlign": "justify", "lineHeight": "1.8", "fontSize": "1.05rem"}
@@ -932,7 +944,7 @@ main_content = html.Div([
     ]), className="mb-3 shadow-sm border-0 bg-white"),
     html.P(
         "三名嫌疑人于1月18日晚19时分别遗弃公司车辆，利用非监控交通工具完成隐秘集结。"
-        "1月19日凌晨03:13-03:48在Kronos Mart完成集群交易（均无会员卡记录），"
+        "1月19日凌晨03:13-03:48在Kronos Mart完成均无会员卡记录的集群交易，"
         "随后维持10-16小时电子静默，错峰重现。",
         className="text-muted mb-5",
         style={"textAlign": "justify", "lineHeight": "1.8", "fontSize": "1.05rem"}
@@ -1023,8 +1035,8 @@ main_content = html.Div([
         ], className="mb-1"),
         html.P([
             html.Strong("核心可疑地点："),
-            "Kronos Mart (#1), Frydos Autosupply (#2), "
-            "Hippokampos (#3), Ouzeri Elian (#4)",
+            "Kronos Mart, Frydos Autosupply, "
+            "Hippokampos, Ouzeri Elian",
         ], className="mb-1"),
         html.P([
             html.Strong("案件性质："),

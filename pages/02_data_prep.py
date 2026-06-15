@@ -190,6 +190,15 @@ sidebar = html.Div([
             html.Li(html.A("4.2 人事特征注入与交叉验证", href="#section-4-2",
                            className="text-decoration-none text-muted d-block")),
         ], className="list-unstyled ms-3"),
+
+        html.Li(html.A("5. 非正式社交网络构建", href="#section-5",
+                       className="text-decoration-none text-muted fw-bold d-block mt-3")),
+        html.Ul([
+            html.Li(html.A("5.1 成员密切关系衡量", href="#section-5-1",
+                           className="text-decoration-none text-muted d-block mt-2 mb-1")),
+            html.Li(html.A("5.2 非正式群体聚类", href="#section-5-2",
+                           className="text-decoration-none text-muted d-block")),
+        ], className="list-unstyled ms-3"),
     ], className="list-unstyled")
 ], className="sticky-top pt-4")
 
@@ -313,6 +322,25 @@ for _, row in result_df.iterrows():
     final_rows.append(row)
 """
 
+code_relationship = """def calculate_edge_weight(loc_norm, travel_norm, consume_norm, dept_a, dept_b):
+    base_score = 0.4 * loc_norm + 0.4 * travel_norm + 0.2 * consume_norm
+
+    if dept_a == dept_b and dept_a != '未知部门':
+        structure_factor = 0.8
+    else:
+        structure_factor = 1.2
+
+    return base_score * structure_factor"""
+
+code_clustering = """G = nx.Graph()
+for _, row in strong_relation.iterrows():
+    G.add_edge(row['source'], row['target'], weight=row['score'])
+
+deg_dict = dict(G.degree(weight='weight'))
+between_dict = nx.betweenness_centrality(G, weight='weight')
+
+communities_list = [list(c) for c in greedy_modularity_communities(G)]"""
+
 # ==========================================
 # 右侧主体内容定义
 # ==========================================
@@ -416,6 +444,26 @@ main_content = html.Div([
         "匹配过程未输入任何人事先验知识的前提下，4.1 节识别出有 7 张卡片属于公共卡车调用，2 张卡片属于未分配车辆，两者合计恰好对齐这 9 名特殊员工。这一底层物理轨迹推演与上层人事档案记录构成了强有力的闭环印证，证明了我们重构映射字典的极高精准度。",
         className="text-muted", style={"textAlign": "justify", "lineHeight": "1.8"}),
     render_code_block(code_personnel),
+
+    # --- Section 5 ---
+    html.H4("5. 非正式社交网络构建", id="section-5", className="fw-bold mb-4 mt-5 border-bottom pb-2",
+            style={"color": "black"}),
+
+    html.H5("5.1 成员密切关系衡量", id="section-5-1", className="fw-bold mt-4 mb-3",
+            style={"color": "black"}),
+    html.P(
+        "基于员工的物理驻留轨迹同行记录以及线下联合财务消费频率，我们通过归一化处理构建了多维度的基础社交联系得分。为了将正常的业务往来与私人社交区分开，我们仅考虑非工作时间，并引入了组织架构滤波机制,当识别到两名员工隶属同一业务部门时，系统会对其基础得分乘以零点八的折损系数，以剔除日常工作带来的数据噪音；反之，若两人跨越部门建制产生高频交集，系统则赋予一点二倍的权重奖励，借此精准剥离出隐藏在企业正式架构下的非正式人际纽带。",
+        className="text-muted", style={"textAlign": "justify", "lineHeight": "1.8"}),
+    render_code_block(code_relationship),
+
+    html.H5("5.2 非正式群体聚类", id="section-5-2", className="fw-bold mt-5 mb-3",
+            style={"color": "black"}),
+    html.P(
+        "完成全量员工两两之间的密切度量化后，系统截取得分排名前百分之二十五的强关联数据作为拓扑结构的有效边构建无向加权网络模型，并引入了基于模块度最大化的贪心算法，在没有任何先验标签的干预下自底向上地发掘网络中高度内聚的私人圈层。同时，系统计算了每个节点的度数与介数中心性，以量化该员工在非正式群体内部的枢纽价值与信息控制力。",
+        className="text-muted mb-2", style={"textAlign": "justify", "lineHeight": "1.8"}),
+    render_code_block(code_clustering),
+
+
 
 ], className="px-md-4 mb-5")
 

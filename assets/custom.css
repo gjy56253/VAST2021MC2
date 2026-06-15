@@ -1,52 +1,81 @@
-/* assets/custom.css */
-
 @media print {
-    /* 保留背景色/图 */
+    /* ==========================================
+       1. 纸张设置：完美 1920px 宽屏比例 + 无缝零边距
+       ========================================== */
+    @page {
+        /* 508mm 在 96dpi 下精确等于 1920 像素。高度 4000mm 保证超长图不被切断 */
+        size: 508mm 4000mm;
+        margin: 0mm !important; /* 核心：设为0，彻底消除四周的白色缝隙和白边 */
+    }
+
+    /* 强制保留背景色 */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* 只隐藏真正不需要打印的交互控件（如按钮、滑块等） */
-    .btn,
-    .dcc-dropdown,
-    .rc-slider,
-    .dcc-slider,
-    .dash-debug-menu {
+    /* 隐藏不需要打印的控件 */
+    .btn, .dcc-dropdown, .rc-slider, .dcc-slider, .dash-debug-menu, ::-webkit-scrollbar {
         display: none !important;
     }
 
-    /*
-      原规则里 .sticky-top 和 .navbar 的隐藏已删除。
-      如果导航栏或目录还用到 .sticky-top 并且你想保留它，
-      就不要写 display:none。如果你有其他悬浮元素（比如“返回顶部”按钮）
-      不想打印，可以单独加 .no-print 类，或用更精确的选择器。
-    */
+    /* ==========================================
+       2. 冻结视口：强制浏览器以电脑宽屏模式截图
+       ========================================== */
+    html, body {
+        position: relative !important;
+        width: 1920px !important; /* 强制锁定为电脑宽屏像素 */
+        min-width: 1920px !important;
+        max-width: 1920px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
 
-    /*
-      原规则里强制 .col-md-9, .col-12 全宽的代码已删除，
-      这样左右分栏（目录+内容）会完全保持屏幕上的比例。
-    */
+    /* 导航栏锁定 */
+    .navbar {
+        position: static !important;
+        width: 1920px !important;
+        margin: 0 !important;
+    }
 
-    /* 避免跨页截断 */
-    pre,
-    img,
-    .card,
-    .js-plotly-plot {
-        page-break-inside: avoid !important;
+    /* 侧边栏锁定（假设你用的是 150px） */
+    .sidebar {
+        position: absolute !important;
+        top: 72px !important;
+        left: 0 !important;
+        width: 150px !important; /* 如果你的侧边栏是其他宽度，请同步修改这里 */
+        border-right: 1px solid #e9ecef !important;
+    }
+
+    /* 主内容区锁定：1920 - 150 = 1770px */
+    .main-content {
+        position: static !important;
+        width: 1770px !important; /* 强制把剩余的宽度全部撑满，一像素都不让 */
+        margin-top: 0 !important;
+        margin-left: 150px !important;
+        padding: 20px !important;
+        overflow: visible !important;
     }
 
     /* ==========================================
-       Tab 自动展开打印（保持不变）
+       3. Plotly 图表防挤压修复
        ========================================== */
+    /* 强制 Plotly 的内部容器填满我们刚刚锁定的父级宽度 */
+    .js-plotly-plot, .plot-container, .svg-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 解除所有分页限制，实现流式长图 */
     .tab-content > .tab-pane {
         display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
-        page-break-before: always;
-        padding-top: 20px !important;
     }
-    .nav-tabs {
-        display: none !important;
+    .nav-tabs { display: none !important; }
+
+    pre, img, .card, table, h1, h2, h3, h4, .tab-pane {
+        page-break-inside: auto !important;
     }
 }
